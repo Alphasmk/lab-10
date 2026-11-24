@@ -4,7 +4,7 @@ $replica = "riot-ci-replica-$env:BUILD_NUMBER"
 $password = [guid]::NewGuid().ToString('N')
 $server = $null
 try {
-    foreach ($item in @(@($primary, 55444), @($replica, 55445))) {
+    foreach ($item in @(@($primary, 16454), @($replica, 16455))) {
         docker run -d --name $item[0] -e POSTGRES_USER=lab04 -e "POSTGRES_PASSWORD=$password" -e POSTGRES_DB=event_management -p "127.0.0.1:$($item[1]):5432" postgres:17
         if ($LASTEXITCODE -ne 0) { throw 'Не удалось запустить PostgreSQL' }
     }
@@ -17,9 +17,9 @@ try {
         }
         if (-not $ready) { throw "PostgreSQL $name не готов" }
     }
-    $env:LAB06_TEST_DATABASE = "Host=localhost;Port=55444;Database=event_management;Username=lab04;Password=$password;Timeout=3"
+    $env:LAB06_TEST_DATABASE = "Host=localhost;Port=16454;Database=event_management;Username=lab04;Password=$password;Timeout=3"
     $env:ConnectionStrings__Database = $env:LAB06_TEST_DATABASE
-    $env:ConnectionStrings__Replica = "Host=localhost;Port=55445;Database=event_management;Username=lab04;Password=$password;Timeout=3"
+    $env:ConnectionStrings__Replica = "Host=localhost;Port=16455;Database=event_management;Username=lab04;Password=$password;Timeout=3"
     $env:LAB_TEST_SERVER_URL = 'http://127.0.0.1:55000'
     $env:ASPNETCORE_URLS = $env:LAB_TEST_SERVER_URL
     New-Item -ItemType Directory -Force -Path TestResults | Out-Null
