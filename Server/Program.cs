@@ -117,6 +117,7 @@ namespace Server
                 }
                 http.Response.Headers["X-Event-Publication"] = allPublished ? "PUBLISHED" : "FAILED";
             }
+            app.MapGet("/api/version", () => Results.Ok(new { Version = "lab10" }));
             app.MapGet("/api/health", (HttpContext http) => cluster.Status(ClientId(http)));
             app.MapGet("/api/replication", (HttpContext http) => cluster.Status(ClientId(http)));
             app.MapPost("/api/replication/{instance}/availability", (string instance, AvailabilityRequest request, HttpContext http) =>

@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                bat 'kubectl set image deployment/riot-server-invalid server=riot-server:%BUILD_NUMBER%'
+                bat 'kubectl set image deployment/riot-server server=riot-server:%BUILD_NUMBER%'
                 bat 'kubectl rollout status deployment/riot-server --timeout=180s'
                 bat 'kubectl get deployment riot-server -o wide'
                 bat 'kubectl get pods -l app=riot-server -o wide'
