@@ -16,8 +16,13 @@ try {
             Start-Sleep -Seconds 1
         }
         if (-not $ready) { throw "PostgreSQL $name is not ready" }
-        docker exec $name createdb -U lab04 ci_server
-        if ($LASTEXITCODE -ne 0) { throw "Failed to create server database in $name" }
+        $databaseCreated = $false
+        for ($i = 0; $i -lt 30; $i++) {
+            docker exec $name createdb -U lab04 ci_server 2>$null
+            if ($LASTEXITCODE -eq 0) { $databaseCreated = $true; break }
+            Start-Sleep -Seconds 1
+        }
+        if (-not $databaseCreated) { throw "Failed to create server database in $name" }
     }
     $env:LAB06_TEST_DATABASE = "Host=localhost;Port=16454;Database=event_management;Username=lab04;Password=$password;Timeout=3"
     $env:ConnectionStrings__Database = "Host=localhost;Port=16454;Database=ci_server;Username=lab04;Password=$password;Timeout=3"
