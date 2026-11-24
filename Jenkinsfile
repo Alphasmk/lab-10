@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps { bat 'powershell -NoProfile -ExecutionPolicy Bypass -File ci\\test.ps1' }
             post {
-                always { archiveArtifacts artifacts: 'TestResults/**', allowEmptyArchive: true }
+                always { archiveArtifacts artifacts: "TestResults/${env.BUILD_NUMBER}/**", allowEmptyArchive: true }
             }
         }
         stage('Package') {

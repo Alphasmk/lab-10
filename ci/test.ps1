@@ -3,6 +3,7 @@ $primary = "riot-ci-primary-$env:BUILD_NUMBER"
 $replica = "riot-ci-replica-$env:BUILD_NUMBER"
 $password = [guid]::NewGuid().ToString('N')
 $server = $null
+$resultsDir = Join-Path 'TestResults' "$env:BUILD_NUMBER"
 try {
     foreach ($item in @(@($primary, 16454), @($replica, 16455))) {
         docker run -d --name $item[0] -e POSTGRES_USER=lab04 -e "POSTGRES_PASSWORD=$password" -e POSTGRES_DB=event_management -p "127.0.0.1:$($item[1]):5432" postgres:17
@@ -29,14 +30,14 @@ try {
     $env:ConnectionStrings__Replica = "Host=localhost;Port=16455;Database=ci_server;Username=lab04;Password=$password;Timeout=3"
     $env:LAB_TEST_SERVER_URL = 'http://127.0.0.1:55000'
     $env:ASPNETCORE_URLS = $env:LAB_TEST_SERVER_URL
-    New-Item -ItemType Directory -Force -Path TestResults | Out-Null
-    $server = Start-Process -FilePath dotnet -ArgumentList 'Server/bin/Release/net10.0/Server.dll' -PassThru -WindowStyle Hidden -RedirectStandardOutput 'TestResults/server.log' -RedirectStandardError 'TestResults/server-error.log'
+    New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
+    $server = Start-Process -FilePath dotnet -ArgumentList 'Server/bin/Release/net10.0/Server.dll' -PassThru -WindowStyle Hidden -RedirectStandardOutput (Join-Path $resultsDir 'server.log') -RedirectStandardError (Join-Path $resultsDir 'server-error.log')
     $ready = $false
     for ($i = 0; $i -lt 60; $i++) {
         try { Invoke-WebRequest "$env:LAB_TEST_SERVER_URL/api/health" -UseBasicParsing | Out-Null; $ready = $true; break } catch { Start-Sleep -Seconds 1 }
     }
     if (-not $ready) { throw 'Test server is not ready' }
-    dotnet test EventManagement.slnx --configuration Release --no-build --no-restore --logger 'trx;LogFilePrefix=tests' --results-directory TestResults
+    dotnet test EventManagement.slnx --configuration Release --no-build --no-restore --logger 'trx;LogFilePrefix=tests' --results-directory $resultsDir
     if ($LASTEXITCODE -ne 0) { throw 'Tests failed' }
 }
 finally {
