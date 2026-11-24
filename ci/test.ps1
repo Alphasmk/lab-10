@@ -18,7 +18,7 @@ try {
         if (-not $ready) { throw "PostgreSQL $name is not ready" }
         $databaseCreated = $false
         for ($i = 0; $i -lt 30; $i++) {
-            docker exec $name createdb -U lab04 ci_server 2>$null
+            cmd /c "docker exec $name createdb -U lab04 ci_server 2>nul"
             if ($LASTEXITCODE -eq 0) { $databaseCreated = $true; break }
             Start-Sleep -Seconds 1
         }
