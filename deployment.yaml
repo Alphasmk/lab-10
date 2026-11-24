@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: riot-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: riot-server
+  template:
+    metadata:
+      labels:
+        app: riot-server
+    spec:
+      containers:
+        - name: server
+          image: riot-server:lab09
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:8080
+            - name: APP_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: riot-config
+                  key: APP_MODE
+            - name: ConnectionStrings__Database
+              valueFrom:
+                secretKeyRef:
+                  name: riot-database
+                  key: primary
+            - name: ConnectionStrings__Replica
+              valueFrom:
+                secretKeyRef:
+                  name: riot-database
+                  key: replica

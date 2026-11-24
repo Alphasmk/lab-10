@@ -1,0 +1,41 @@
+name: riot-lab08
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: event_management
+      POSTGRES_USER: lab04
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab04 -d event_management"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  replica:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: event_management
+      POSTGRES_USER: lab04
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:5445:5432"
+    volumes:
+      - replica_data:/var/lib/postgresql/data
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab04 -d event_management"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+networks:
+  app:
+volumes:
+  postgres_data:
+  replica_data:

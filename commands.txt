@@ -1,0 +1,26 @@
+kubectl apply -f deployment.yaml
+
+kubectl port-forward service/riot-server 5000:8080
+
+kubectl logs ...
+
+kubectl get pods -w
+kubectl get deployments
+kubectl get service
+kubectl get configmap
+kubectl get nodes
+
+kubectl describe pod ...
+kubectl delete pod ...
+kubectl describe service ...
+
+
+kubectl scale deployment riot-server --replicas=2
+
+kubectl rollout restart deployment/riot-server
+
+$primary = "Host=host.docker.internal;Port=5444;Database=event_management;Username=lab04;Password=$env:POSTGRES_PASSWORD;Timeout=3;Command Timeout=5"
+
+$replica = "Host=host.docker.internal;Port=5445;Database=event_management;Username=lab04;Password=$env:POSTGRES_PASSWORD;Timeout=3;Command Timeout=5"
+
+kubectl create secret generic riot-database --from-literal="primary=$primary" --from-literal="replica=$replica"

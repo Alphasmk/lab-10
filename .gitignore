@@ -208,3 +208,10 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+
+# Empty stderr files produced by the lab experiment runner
+results/*.err
+
+# Local database state and experiment tools
+.tmp/
+.env
