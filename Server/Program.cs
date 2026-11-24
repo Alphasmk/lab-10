@@ -18,7 +18,7 @@ namespace Server
             Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine($"Application mode: {Environment.GetEnvironmentVariable("APP_MODE") ?? "default"}");
             ThreadPool.GetMinThreads(out int workerThreads, out int completionThreads);
-            ThreadPool.SetMinThreads(Math.Max(workerThreads, 32), completionThreads);
+            ThreadPool.SetMinThreads(Math.Max(workerThreads, 128), completionThreads);
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
