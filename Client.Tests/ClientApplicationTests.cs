@@ -24,7 +24,7 @@ namespace Client.Tests
                     using (StringWriter output = new StringWriter())
                     {
                         await new ClientApplication(httpClient, input, output).ExecuteAsync("3");
-                        Assert.Equal(HttpMethod.Post, handler.Request!.Method);
+                        Assert.Equal(HttpMethod.Get, handler.Request!.Method);
                         Assert.Equal("/api/events", handler.Request.RequestUri!.AbsolutePath);
                         Assert.Contains("Статус: OK", output.ToString());
                         Assert.Contains("created", output.ToString());
