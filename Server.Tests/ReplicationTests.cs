@@ -61,6 +61,7 @@ namespace Server.Tests
             Assert.Equal("Replica", Register().Instance);
             Assert.Equal(10, primary.Data.Events[0].AvailablePlaces);
             Assert.Equal(9, replica.Data.Events[0].AvailablePlaces);
+            Assert.Fail();
         }
 
         [Fact]
@@ -86,6 +87,7 @@ namespace Server.Tests
             Assert.Equal(9, primary.Data.Events[0].AvailablePlaces);
             Assert.Equal("Primary", Register().Instance);
             Assert.Equal(8, replica.Data.Events[0].AvailablePlaces);
+            Assert.Fail();
         }
 
         [Fact]

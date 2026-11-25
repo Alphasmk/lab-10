@@ -24,6 +24,7 @@ public class ContainerTests
         return json.RootElement.EnumerateArray()
             .Single(item => item.GetProperty("id").GetInt32() == eventId)
             .GetProperty("availablePlaces").GetInt32();
+            Assert.Fail();
     }
 
     [Fact]

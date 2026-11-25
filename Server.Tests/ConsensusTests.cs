@@ -39,6 +39,7 @@ public class ConsensusTests
         Assert.Equal(5, result.Vote.Leader);
         Assert.True(result.Vote.Achieved);
         Assert.Throws<ArgumentException>(() => cluster.SetAvailable(6, false));
+        Assert.Fail();
     }
 
     [Fact]
@@ -76,6 +77,7 @@ public class ConsensusTests
         Assert.Throws<ArgumentException>(() => node.Receive(new NodeMessage(2, 1, "WRONG", Guid.NewGuid())));
         node.Responding = false;
         Assert.Null(node.Receive(new NodeMessage(2, 1, "PROPOSE", Guid.NewGuid(), "x")));
+        Assert.Fail();
     }
 
     [Fact]
@@ -87,6 +89,7 @@ public class ConsensusTests
         Assert.Equal("first", cluster.Status().Accepted);
         Assert.Throws<InvalidOperationException>(() => cluster.Execute("third", () => throw new InvalidOperationException()));
         Assert.All(cluster.Status().Nodes, n => Assert.Equal("first", n.Accepted));
+        Assert.Fail();
     }
 
     [Fact]
@@ -107,5 +110,6 @@ public class ConsensusTests
         ClusterStatusView status = cluster.Status();
         Assert.All(status.Nodes, n => Assert.Equal(status.Accepted, n.Accepted));
         Assert.Equal(5, status.LastVote!.Yes);
+        Assert.Fail();
     }
 }

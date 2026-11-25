@@ -184,6 +184,7 @@ namespace Server.Tests
                     context.Database.ExecuteSqlRaw(cleanupSql);
                 }
             }
+            Assert.Fail();
         }
 
         [Fact]
