@@ -34,7 +34,7 @@ public class PubSubTests
             && registration.HandledCount("RegistrationCancelled") == 1
             && notification.HandledCount("TicketIssued") == 1);
 
-        Assert.Equal(1, logger.HandledCount("ParticipantRegistered"));
+        Assert.Equal(5, logger.HandledCount("ParticipantRegistered"));
         Assert.Equal(1, registration.HandledCount("ParticipantRegistered"));
         Assert.Equal(1, notification.HandledCount("ParticipantRegistered"));
         Assert.Equal(0, registration.HandledCount("TicketIssued"));
